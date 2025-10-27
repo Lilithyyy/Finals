@@ -3,7 +3,10 @@ import tkinter
 canvas = tkinter.Canvas(width=400, height=400)
 canvas.pack()
 pocet_policok_x, pocet_policok_y = 10, 8
+
 v = 30 #veľkost políčka
+v1 = v
+
 mriezka_x, mriezka_y = 10, 10      # x a y začiatku mriežky
 vypln = 1
 plocha = []
@@ -95,20 +98,44 @@ def switch():
                 tempo.append(1)
             if j == 0:
                 tempo.append(0)
-                
+
         newplocha.append(tempo)
         print(tempo)
 
     plocha=newplocha
     save()
     load()
-    
+
+def changesize(event):
+    global v
+    x = scale.get()
+    v = v1 + x
+    save()
+    load()
+
+def pocty():
+    global plocha
+    countx = 0
+    counto = 0
+    for i in plocha:
+        for j in i:
+            if j ==1:
+                counto+=1
+            if j ==2:
+                countx+=1
+    print(f'Pocet x je: {countx}')
+    print(f'Pocet o je: {counto}')
+
 button1 = tkinter.Button(text='Save', command=save)
 button1.pack()
 button2 = tkinter.Button(text='Load', command=load)
 button2.pack()
 button3 = tkinter.Button(text='Switch', command=switch)
 button3.pack()
+scale = tkinter.Scale(from_ = -28, to = 9, orient='horizontal', length=50, command=changesize)
+scale.pack()
+button4 = tkinter.Button(text='Pocet', command=pocty)
+button4.pack()
 
 kresli_mriezku(pocet_policok_x, pocet_policok_y, v, mriezka_x, mriezka_y)
 
