@@ -1,51 +1,38 @@
-import tkinter as tk
+import tkinter
+canvas = tkinter.Canvas(width=420, height=420)
+canvas.pack()
+SIRKA = 400
+stupnica = 'cdefgah'
 
-noty = open('noty.txt', 'r').readline()
-c = tk.Canvas(width=400, height=600)
-c.pack()
-spacing, y, count = 15, 20, 0
+def osnova(x, y, dlzka):
+    for i in range(5):
+        canvas.create_line(x, y+i*10, x+dlzka, y+i*10)
 
-count = len(noty)
-length = count//(360//31)
+def nacitaj_noty(nazov_suboru):        
+    subor = open(nazov_suboru, 'r')
+    return subor.readline().strip()
+    #return 'cdefgahhagfedcceggeccdfaafdcegegfafafggfedc'
 
-for i in range(length):
-    for j in range(5):
-        c.create_line(0, y + j*spacing, 400, y+j*spacing, width=2)
-    y+=5*spacing + 20
+def kresli_notu(x, y):
+    canvas.create_oval(x-5, y-3, x+5, y+3)
 
-x, y = 20, 15
-for note in noty:
-    match note:
-        case 'c':
-            notey = spacing*5
-            color = "#4a2bad"
-        case 'd':
-            notey = spacing*4.5
-            color = "#5538b5"
-        case 'e':
-            notey = spacing*4
-            color = "#6449bf"
-        case 'f':
-            notey = spacing*3.5
-            color = "#7057c2"
-        case 'g':
-            notey = spacing*3
-            color = "#7c67c2"
-        case 'a':
-            notey = spacing*2.5
-            color = "#8774c4"
-        case 'h':
-            notey = spacing*2
-            color = "#9d8fcc"
+def vyska(nota):
+    return stupnica.find(nota) * 5
+    
+def kresli(noty):
+    notax = 20
+    osnovay = 10
+    osnova(0, osnovay, SIRKA)
+    pocet = 0
+    for nota in noty:
+        kresli_notu(notax, osnovay + 5 * 10 - vyska(nota))
+        notax += 20
+        pocet += 1
+        if pocet+1 == SIRKA // 20 :
+            osnovay += 100
+            notax = 20
+            pocet = 0
+            osnova(0, osnovay, SIRKA)
 
-    c.create_oval(x-6, y+notey-3, x+16, y+notey+13, width=2, outline=color)
-    c.create_oval(x-2, y+notey-3, x+12, y+notey+13, width=2, outline=color)
-    c.create_oval(x-3, y+notey-3, x+13, y+notey+13, width=2, outline=color)
-
-    if x < 380:
-        x+=30
-    else:
-        x = 20
-        y += 5*spacing +20
-
-c.mainloop()
+noty = nacitaj_noty('subory/noty.txt')
+kresli(noty)

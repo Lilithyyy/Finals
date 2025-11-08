@@ -1,36 +1,23 @@
-zoznamjedal = open('objednane_jedla.txt', 'r').readlines()
-z, c, m, o = 0, 0, 0, 0
+subor = open('subory/objednane_jedla.txt', 'r')
 
-for i in range(len(zoznamjedal)):
-    zoznamjedal[i] = zoznamjedal[i].rstrip("\n").split(" ")
-    match zoznamjedal[i][1]:
-        case 'z':
-            z+=1
-        case 'c':
-            c+=1
-        case 'm':
-            m+=1
-        case 'o':
-            o+=1
-if z < 20:
-    print('z')
+s = {'z':0, 'c':0, 'h':0, 'm':0}         # {riadok A}
+pocet = 0
+for riadok in subor:
+    info = riadok.split()
+    jedlo = info[1]
+    pocet += 1
+    s[jedlo] = s.get(jedlo, 0) + 1       # {riadok B}
+
+print('počet jedál:', pocet)
+malo = ''
+for jedlo, pocet in s.items():
+    print('Kod jedla:{} počet objednávok:{}'.format(jedlo, pocet))
+    if pocet < 20:
+        malo = malo + str(jedlo) + ', '  # {riadok C}
+malo = malo[:-2]                         # {riadok D}
+if malo != '':
+    print('Málo objednávok majú tieto jedlá:', malo)
 else:
-    print('Zelenych jedal je viac ako 20')
+    print('Všetky jedlá si objednalo aspoň 20 ľudí')
 
-if c < 20:
-    print('c')
-else:
-    print('Cervenych jedal je viac ako 20')
-
-if m < 20:
-    print('m')
-else:
-    print('Modrych jedal je viac ako 20')
-
-if o < 20:
-    print('o')
-else:
-    print('Oranzovych jedal je viac ako 20')
-
-print(f'Celkovy pocet objednanych jedal je {len(zoznamjedal)}')
-print(f'z: {z}, c: {c}, m: {m}, o: {o}')
+subor.close()
